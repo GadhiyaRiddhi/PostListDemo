@@ -6,24 +6,38 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class FavPostListingVC: UIViewController {
 
+    //MARK: Variables
+    @IBOutlet weak var favPostTableView: UITableView!
+    var favourites:[PostData]!
+    let disposeBag = DisposeBag()
+    
+    //MARK: View Life Cycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.favPostTableView.separatorStyle = .singleLine
 
-        // Do any additional setup after loading the view.
+        self.favourites = UserDefaults.standard.value(forKey:"FvrtList") as? [PostData]
+        let fvrtData = UserDefaults.standard.data(forKey: "FvrtList")
+        self.favourites = try! JSONDecoder().decode([PostData].self, from: fvrtData!)
+        self.setUpTableViewData()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setUpTableViewData()
+    {
+        //data fill
+        let items : Observable<[PostData]> = Observable.just(self.favourites)
+        items
+            .bind(to: favPostTableView.rx.items(cellIdentifier: "fvrtCell", cellType: PostDataCell.self)) { (row, post, cell) in
+                cell.postTitleLbl.text = post.title
+                cell.postDescriptionLbl.text = post.body
+            }
+            .disposed(by: disposeBag)
     }
-    */
-
+    
 }

@@ -8,7 +8,12 @@
 import UIKit
 
 class PostDataCell: UITableViewCell {
-
+    
+    
+    @IBOutlet weak var postTitleLbl: UILabel!
+    @IBOutlet weak var postDescriptionLbl: UILabel!
+    @IBOutlet weak var favouriteImgView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -16,8 +21,6 @@ class PostDataCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }
